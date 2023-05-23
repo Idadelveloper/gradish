@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gradish/screens/scan_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -30,9 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: const Column(
+      body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 50,
             child: Text(
               "Hello Ida,",
@@ -42,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 100,
             child: Center(
               child: Text("No activity yet"),
@@ -51,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             child: Column(
               children: [
-                ElevatedButton(
+                const ElevatedButton(
                   onPressed: null,
                   style: ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll<Color>(Color(0xff3D3839)),
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Color(0xffffc604))
                     ),
                 ),
-                ElevatedButton(
+                const ElevatedButton(
                   onPressed: null,
                   style: ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll<Color>(Color(0xff3D3839)),
@@ -76,11 +77,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: null,
-                  style: ButtonStyle(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ScanScreen()),
+                    );
+                  },
+                  style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll<Color>(Color(0xff3D3839)),
                   ),
-                  child: Text(
+                  child: const Text(
                       "Record ID info",
                       style: TextStyle(
                           fontWeight: FontWeight.w200,
