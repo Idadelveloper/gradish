@@ -12,9 +12,9 @@ class FirestoreRepository {
 
   FirestoreRepository(this._firestoreService);
 
-  Future<Either<Failure, void>> addBasicUserInfo(User currentUser) async {
+  Future<Either<Failure, void>> addBasicUserInfo({required User currentUser, String? name}) async {
     try {
-      await _firestoreService.addBasicUserInfo(currentUser: currentUser);
+      await _firestoreService.addBasicUserInfo(currentUser: currentUser, userName: name);
       return const Right(null);
     } on FirebaseException catch (e) {
       return Left(Failure(errorMessage: e.message));
@@ -25,7 +25,7 @@ class FirestoreRepository {
 
   Future<Either<Failure, void>> getBasicUserInfo(User currentUser) async {
     try {
-      await _firestoreService.addBasicUserInfo(currentUser: currentUser);
+      await _firestoreService.getBasicUserInfo(currentUser: currentUser);
       return const Right(null);
     } on FirebaseException catch (e) {
       return Left(Failure(errorMessage: e.message));

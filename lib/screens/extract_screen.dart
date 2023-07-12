@@ -15,7 +15,6 @@ class ExtractScreen extends StatefulWidget {
 class _ExtractScreenState extends State<ExtractScreen> {
   File? _image;
 
-
   final imagePicker = ImagePicker();
 
   Future getImage() async {

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradish/providers/firestore_provider.dart';
 import 'package:gradish/repositories/auth_repository.dart';
+import 'package:gradish/repositories/firestore_repository.dart';
 import 'package:gradish/screens/auth_screens/login_screen.dart';
 import 'package:gradish/screens/auth_screens/register_screen.dart';
 import 'package:gradish/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gradish/services/auth_service/firebase_auth_service.dart';
+import 'package:gradish/services/firestore_service/firestore_service.dart';
 import 'package:provider/provider.dart';
+import 'core/enums.dart';
 import 'firebase_options.dart';
 import 'providers/auth_provider.dart';
 
@@ -28,14 +32,17 @@ class GradishApp extends StatefulWidget {
 class _GradishAppState extends State<GradishApp> {
   // This widget is the root of your application.
 
- late final FirebaseAuthService _authService;
+ final FirebaseAuthService _authService = FirebaseAuthService();
  late final AuthRepository _authRepository;
+ final FirestoreService _firestoreService = FirestoreService();
+ late final FirestoreRepository _firestoreRepository;
+
 
   @override
   void initState() {
     super.initState();
-    _authService = FirebaseAuthService();
     _authRepository = AuthRepository(_authService);
+    _firestoreRepository = FirestoreRepository(_firestoreService);
   }
 
 
@@ -45,7 +52,8 @@ class _GradishAppState extends State<GradishApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
     providers: [
-      ChangeNotifierProvider<AuthProvider>(create: (context)=> AuthProvider(_authRepository)..authStateChanged())
+      ChangeNotifierProvider<AuthProvider>(create: (context)=> AuthProvider(_authRepository)..authStateChanged()),
+      ChangeNotifierProvider<FirestoreProvider>(create: (context)=> FirestoreProvider(_firestoreRepository)),
     ],
       child: Consumer<AuthProvider>(
         builder: (context, authData, child){
@@ -60,8 +68,8 @@ class _GradishAppState extends State<GradishApp> {
                     Theme.of(context).textTheme
                 )
             ),
-            // home:  authData.authState == AuthState.authenticated || authData.authState == AuthState.initial ? const HomeScreen(): RegisterScreen(),
-            home: RegisterScreen(),
+            home:  authData.authState == AuthState.authenticated || authData.authState == AuthState.initial ? const HomeScreen(): RegisterScreen(),
+            //home: RegisterScreen(),
           );
         },
 

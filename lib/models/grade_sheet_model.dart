@@ -11,7 +11,7 @@ class GradeSheet {
       required this.courseCode,
       required this.year,
       required this.semester,
-      required this.data,
+      this.data,
         this.docId,
       });
 

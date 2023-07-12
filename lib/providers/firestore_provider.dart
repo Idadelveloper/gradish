@@ -16,12 +16,12 @@ class FirestoreProvider extends ChangeNotifier {
 
   FirestoreProvider(this._firestoreRepository);
 
-  Future<void> addBasicUserInfo(User currentUser) async {
+  Future<void> addBasicUserInfo({required User currentUser, String? name}) async {
     state = AppState.submitting;
     notifyListeners();
 
     Either<Failure, void> response =
-        await _firestoreRepository.addBasicUserInfo(currentUser);
+        await _firestoreRepository.addBasicUserInfo(currentUser: currentUser, name: name);
     response.fold((failure) {
       errorMessage = failure.errorMessage;
       state = AppState.error;
@@ -38,7 +38,7 @@ class FirestoreProvider extends ChangeNotifier {
     notifyListeners();
 
     Either<Failure, void> response =
-        await _firestoreRepository.addBasicUserInfo(currentUser);
+        await _firestoreRepository.getBasicUserInfo(currentUser);
     response.fold((failure) {
       errorMessage = failure.errorMessage;
       state = AppState.error;

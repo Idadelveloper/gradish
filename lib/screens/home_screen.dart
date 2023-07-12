@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradish/providers/auth_provider.dart';
+import 'package:gradish/screens/create_course_screen/create_course_screen.dart';
 import 'package:gradish/screens/extract_screen.dart';
 import 'package:gradish/screens/scan_screen.dart';
 import 'package:provider/provider.dart';
@@ -69,8 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Color(0xffffc604))
                       ),
                   ),
-                  const ElevatedButton(
-                    onPressed: null,
+                   ElevatedButton(
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateCourseScreen()));
+                    },
                     style: ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll<Color>(Color(0xff3D3839)),
                     ),
