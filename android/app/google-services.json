@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "219036330580",
+    "project_id": "gradish",
+    "storage_bucket": "gradish.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219036330580:android:07662ed9253e71dcab9bc1",
+        "android_client_info": {
+          "package_name": "com.idadelveloper.gradish"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219036330580-5altobr5hadnffck9bh99rblah5ilkhd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.idadelveloper.gradish",
+            "certificate_hash": "92d348b510831ea8602e8f8dd0d3e8283d9a9bc4"
+          }
+        },
+        {
+          "client_id": "219036330580-680ltqvfq7qartg5j5s97e6pr6dncaic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmHPfNjE0XGPYhnDchOQtDmnZgqZaSlhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219036330580-680ltqvfq7qartg5j5s97e6pr6dncaic.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "219036330580-bi518ohop7dugn53f6ulf14p5h883rtt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.idadelveloper.gradish"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,14 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+// import 'package:googleapis/vision/v1.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:math' as math;
 
 class ScanScreen extends StatefulWidget {
   const ScanScreen({Key? key}) : super(key: key);
@@ -15,6 +23,8 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
   late final Future<void> _future;
 
   CameraController? _cameraController;
+
+  final String _base64String = '';
 
   @override
   void initState() {
@@ -44,6 +54,47 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
       _startCamera();
     }
   }
+
+  // Uint8List _imageBytes = Uint8List(0);
+
+
+  //
+  // Future<String> getFileFromAsset(String assetFileName,
+  //     {String? temporaryFileName}) async {
+  //   final byteData = await rootBundle.load('assets/$assetFileName');
+  //
+  //   final buffer = byteData.buffer;
+  //
+  //   final fileName = temporaryFileName ?? assetFileName;
+  //
+  //   final filePath = await getTempFile(fileName);
+  //
+  //   await File(filePath).delete();
+  //
+  //   await File(filePath).writeAsBytes(
+  //       buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+  //
+  //   return filePath;
+  // }
+  //
+  // Future<String> getTempFile([String? fileName]) async {
+  //   final tempDir = await getTemporaryDirectory();
+  //
+  //   return '${tempDir.path}${Platform.pathSeparator}${fileName ?? UniqueKey().toString()}';
+  // }
+  //
+  // Future imageToBase64(String imagePath) async {
+  //   // String imagePath = "assets/gfglogo.png";
+  //   File imageFile = File(imagePath);
+  //
+  //   Uint8List bytes = await imageFile.readAsBytes();
+  //
+  //   String base64String = base64.encode(bytes);
+  //   setState(() {
+  //     base64String = base64String;
+  //   });
+  //
+  // }
 
   Future<void> _requestCameraPermission() async {
     final status = await Permission.camera.request();
@@ -97,6 +148,7 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
 
     });
   }
+
 
 
   @override
@@ -166,7 +218,36 @@ class _ScanScreenState extends State<ScanScreen> with WidgetsBindingObserver {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                  )
+                  ),
+                floatingActionButton: FloatingActionButton(
+                  // Provide an onPressed callback.
+                  onPressed: () async {
+                    // Take the Picture in a try / catch block. If anything goes wrong,
+                    // catch the error.
+                    try {
+                      
+
+                      // Attempt to take a picture and get the file `image`
+                      // where it was saved.
+                      final image = await _cameraController!.takePicture();
+                      final file = File(image.path);
+                      // final inputImage = InputImage.fromFile(file);
+
+                      // var path = getTempFile(image.path);
+                      // print("Path $path");
+                      // var encoded = await imageToBase64(path as String);
+                      // print("Encoded string: $encoded, Path: $path");
+                      if (!mounted) return;
+
+
+
+                    } catch (e) {
+                      // If an error occurs, log the error to the console.
+                      print(e);
+                    }
+                  },
+                  child: const Icon(Icons.camera_alt),
+                ),
               )
           ],
         );
