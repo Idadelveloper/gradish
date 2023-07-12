@@ -3,13 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gradish/models/auth_models.dart';
 import 'package:gradish/repositories/auth_repository.dart';
+import '../core/enums.dart';
 import '../core/failure.dart';
 
 
-enum AppState {initial, submitting, success, error}
-enum AuthState{initial, authenticated, unauthenticated}
-class AuthProvider extends ChangeNotifier{
-
+class AuthProvider extends ChangeNotifier {
   User? currentUser;
   final AuthRepository _authRepository;
   AppState state = AppState.initial;
@@ -18,13 +16,12 @@ class AuthProvider extends ChangeNotifier{
 
   AuthProvider(this._authRepository);
 
-
-  Future<void> signInWithEmailAndPassword(LoginRequest credentials) async{
-
+  Future<void> signInWithEmailAndPassword(LoginRequest credentials) async {
     state = AppState.submitting;
     notifyListeners();
 
-    final Either<Failure, User?> response = await _authRepository.signInWithEmailAndPassword(credentials);
+    final Either<Failure, User?> response =
+        await _authRepository.signInWithEmailAndPassword(credentials);
 
     response.fold((failure) {
       errorMessage = failure.errorMessage;
@@ -37,31 +34,12 @@ class AuthProvider extends ChangeNotifier{
     });
   }
 
-  Future<void> registerWithEmailAndPassword(RegisterRequest credentials) async{
-
+  Future<void> registerWithEmailAndPassword(RegisterRequest credentials) async {
     state = AppState.submitting;
     notifyListeners();
 
-    final Either<Failure, User?> response = await _authRepository.registerWithEmailAndPassword(credentials);
-
-    response.fold((failure) {
-      errorMessage = failure.errorMessage;
-      state = AppState.error;
-      notifyListeners();
-    }, (user) {
-      errorMessage = null;
-      state = AppState.success;
-      currentUser = user;
-      notifyListeners();
-    });
-  }
-
-  Future<void> signInWithGoogle() async{
-
-    state = AppState.submitting;
-    notifyListeners();
-
-    final Either<Failure, User?> response = await _authRepository.signInWithGoogle();
+    final Either<Failure, User?> response =
+        await _authRepository.registerWithEmailAndPassword(credentials);
 
     response.fold((failure) {
       errorMessage = failure.errorMessage;
@@ -75,7 +53,26 @@ class AuthProvider extends ChangeNotifier{
     });
   }
 
-  Future<void> logOut()async{
+  Future<void> signInWithGoogle() async {
+    state = AppState.submitting;
+    notifyListeners();
+
+    final Either<Failure, User?> response =
+        await _authRepository.signInWithGoogle();
+
+    response.fold((failure) {
+      errorMessage = failure.errorMessage;
+      state = AppState.error;
+      notifyListeners();
+    }, (user) {
+      errorMessage = null;
+      state = AppState.success;
+      currentUser = user;
+      notifyListeners();
+    });
+  }
+
+  Future<void> logOut() async {
     state = AppState.submitting;
     notifyListeners();
 
@@ -89,14 +86,14 @@ class AuthProvider extends ChangeNotifier{
       errorMessage = null;
       state = AppState.success;
       currentUser = null;
+      authState = AuthState.unauthenticated;
       notifyListeners();
     });
-
   }
 
-
-  Future<void> authStateChanged()async{
-    Either<Failure, Stream<User?>> response = await _authRepository.getAuthState();
+  Future<void> authStateChanged() async {
+    Either<Failure, Stream<User?>> response =
+        await _authRepository.getAuthState();
 
     response.fold((failure) {
       errorMessage = failure.errorMessage;
@@ -104,23 +101,14 @@ class AuthProvider extends ChangeNotifier{
       notifyListeners();
     }, (userStream) {
       userStream.listen((user) {
-        if(user == null){
+        if (user == null) {
           authState = AuthState.unauthenticated;
           notifyListeners();
-        } else{
+        } else {
           authState = AuthState.authenticated;
           notifyListeners();
         }
       });
-
-
     });
   }
-
-
-
-
-
-
-
 }
