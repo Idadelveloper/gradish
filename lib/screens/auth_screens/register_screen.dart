@@ -64,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         }
                       },
                     ),
-                    const Text("Paaword"),
+                    const Text("Password"),
                     TextFormField(
                       controller: passwordController,
                       obscureText: true,

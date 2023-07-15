@@ -8,7 +8,7 @@ import 'package:gradish/providers/firestore_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/auth_provider.dart';
-import '../extract_screen.dart';
+import '../scan_screen.dart';
 
 class CreateCourseScreen extends StatefulWidget {
   const CreateCourseScreen({Key? key}) : super(key: key);
