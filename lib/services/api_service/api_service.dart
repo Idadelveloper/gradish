@@ -14,11 +14,12 @@ class APIService  {
       data: data,
       options: Options(contentType: Headers.jsonContentType)
     );
-    final responseData = json.decode(response.data);
+    // final responseData = json.decode(response.data);
+    final Map<String, dynamic> responseJson = response.data;
 
 
-    print(responseData["coded number"]);
-    return Right(response.data);
+    print(responseJson["detected"]);
+    return Right(responseJson);
   }
 
 

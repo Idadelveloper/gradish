@@ -34,8 +34,19 @@ class _SelectedImageState extends State<SelectedImage> {
                 ElevatedButton(onPressed: () {}, child: const Text("Cancel")),
                 ElevatedButton(onPressed: () async {
                   var results = await apiService.post(widget.image.readAsBytesSync());
+                  results.fold((l) => {
+
+                  }, (right) => {
+                    showDialog(context: context, builder: (context) {
+                      return ExtractDialog(
+                          codedNumber: right["detected"]["coded number"],
+                          mark: right["detected"]["mark"]
+                      );
+                    })
+                  });
 
 
+                  
                   // print(result);
 
                 }, child: const Text("Continue"))
@@ -45,5 +56,4 @@ class _SelectedImageState extends State<SelectedImage> {
         ),
     );
   }
-
 }

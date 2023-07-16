@@ -13,15 +13,16 @@ class ExtractDialog extends StatefulWidget {
 class _ExtractDialogState extends State<ExtractDialog> {
   @override
   Widget build(BuildContext context) {
+    var dialog = context.widget as ExtractDialog;
     return AlertDialog(
-      title: Text("Text Found"),
+      title: const Text("Text Found"),
       content: Column(
         children: [
-          Text("Coded Number: "),
-          Spacer(),
-          Text("Mark: "),
-          Spacer(),
-          ElevatedButton(onPressed: () {}, child: Text("Continue"))
+          Text("Coded Number: ${dialog.codedNumber}"),
+          const Spacer(),
+          Text("Mark: ${dialog.mark}"),
+          const Spacer(),
+          ElevatedButton(onPressed: () {}, child: const Text("Save"))
         ],
       ),
     );
