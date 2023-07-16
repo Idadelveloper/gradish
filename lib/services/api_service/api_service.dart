@@ -1,28 +1,29 @@
-import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:gradish/models/upload_image_model.dart';
 
-class APIService  {
-  final url = "https://gradish.nw.r.appspot.com/upload";
-  final dio = Dio();
+import '.env.dart';
 
-  Future<Either<String, dynamic>> post(data) async {
-    final Response response = await dio.post(
-      url,
-      data: data,
-      options: Options(contentType: Headers.jsonContentType)
-    );
+const String uploadEndpoint = "/upload";
+
+class APIService {
+  final Dio _dio =
+      Dio(BaseOptions(baseUrl: baseUrl, responseType: ResponseType.json));
+
+  Future<UploadImageResult> uploadImage(Uint8List image) async {
+    final Response response = await _dio.post(uploadEndpoint,
+        data: image, options: Options(contentType: Headers.jsonContentType));
     // final responseData = json.decode(response.data);
-    final Map<String, dynamic> responseJson = response.data;
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseJson = response.data;
 
-
-    print(responseJson["detected"]);
-    return Right(responseJson);
+      return UploadImageResult.fromJson(responseJson);
+    } else {
+      DioException dioException = DioException(
+          requestOptions: RequestOptions(path: "$baseUrl$uploadEndpoint"));
+      throw dioException;
+    }
   }
-
-
 }
 
 // class APIService<T, U>  {
