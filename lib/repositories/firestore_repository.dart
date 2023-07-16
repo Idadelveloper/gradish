@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:googleapis/forms/v1.dart';
 import 'package:gradish/services/firestore_service/firestore_service.dart';
 
 import '../core/failure.dart';
@@ -12,9 +11,11 @@ class FirestoreRepository {
 
   FirestoreRepository(this._firestoreService);
 
-  Future<Either<Failure, void>> addBasicUserInfo({required User currentUser, String? name}) async {
+  Future<Either<Failure, void>> addBasicUserInfo(
+      {required User currentUser, String? name}) async {
     try {
-      await _firestoreService.addBasicUserInfo(currentUser: currentUser, userName: name);
+      await _firestoreService.addBasicUserInfo(
+          currentUser: currentUser, userName: name);
       return const Right(null);
     } on FirebaseException catch (e) {
       return Left(Failure(errorMessage: e.message));
@@ -34,12 +35,12 @@ class FirestoreRepository {
     }
   }
 
-  Future<Either<Failure, void>> addGradeSheet(
+  Future<Either<Failure, String>> addGradeSheet(
       {required User currentUser, required GradeSheet gradeSheet}) async {
     try {
-      await _firestoreService.addGradeSheet(
+      String docId = await _firestoreService.addGradeSheet(
           currentUser: currentUser, gradeSheet: gradeSheet);
-      return const Right(null);
+      return Right(docId);
     } on FirebaseException catch (e) {
       return Left(Failure(errorMessage: e.message));
     } catch (e) {

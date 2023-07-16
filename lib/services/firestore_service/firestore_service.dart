@@ -34,14 +34,22 @@ class FirestoreService {
         .get();
   }
 
-  Future<void> addGradeSheet(
+  Future<String> addGradeSheet(
       {required User currentUser, required GradeSheet gradeSheet}) async {
+    String docId = "";
     await _firestore
         .collection("users")
         .doc(currentUser.uid)
         .collection("gradeSheet")
-        .doc()
-        .set(gradeSheet.toMap());
+        .add(gradeSheet.toMap())
+        .then((DocumentReference docRef) async {
+      ///Gets the document id after uploading, and
+      ///also immediately updates the document to include the docId
+      docId = docRef.id;
+      await docRef.update(gradeSheet.copyWith(docId: docId).toMap());
+    });
+
+    return docId;
   }
 
   Future<void> updateGradeSheet({

@@ -12,16 +12,17 @@ class FirestoreProvider extends ChangeNotifier {
 
   AppState state = AppState.initial;
   String? errorMessage;
-  List<GradeSheet>? gradeSheets = [];
+  List<GradeSheet> gradeSheets = [];
 
   FirestoreProvider(this._firestoreRepository);
 
-  Future<void> addBasicUserInfo({required User currentUser, String? name}) async {
+  Future<void> addBasicUserInfo(
+      {required User currentUser, String? name}) async {
     state = AppState.submitting;
     notifyListeners();
 
-    Either<Failure, void> response =
-        await _firestoreRepository.addBasicUserInfo(currentUser: currentUser, name: name);
+    Either<Failure, void> response = await _firestoreRepository
+        .addBasicUserInfo(currentUser: currentUser, name: name);
     response.fold((failure) {
       errorMessage = failure.errorMessage;
       state = AppState.error;
@@ -46,6 +47,7 @@ class FirestoreProvider extends ChangeNotifier {
     }, (success) {
       errorMessage = null;
       state = AppState.success;
+
       notifyListeners();
     });
   }
@@ -55,15 +57,16 @@ class FirestoreProvider extends ChangeNotifier {
     state = AppState.submitting;
     notifyListeners();
 
-    Either<Failure, void> response = await _firestoreRepository.addGradeSheet(
+    Either<Failure, String> response = await _firestoreRepository.addGradeSheet(
         currentUser: currentUser, gradeSheet: gradeSheet);
     response.fold((failure) {
       errorMessage = failure.errorMessage;
       state = AppState.error;
       notifyListeners();
-    }, (success) {
+    }, (docId) {
       errorMessage = null;
       state = AppState.success;
+      gradeSheets.add(gradeSheet.copyWith(docId: docId));
       notifyListeners();
     });
   }
@@ -87,12 +90,13 @@ class FirestoreProvider extends ChangeNotifier {
   }
 
   Future<void> updateGradeSheet(
-      {required User currentUser, required GradeSheet gradeSheet}) async {
+      {required User currentUser, required GradeSheet newGradeSheet}) async {
     state = AppState.submitting;
     notifyListeners();
 
-    Either<Failure, void> response = await _firestoreRepository
-        .updateGradeSheet(currentUser: currentUser, newGradeSheet: gradeSheet);
+    Either<Failure, void> response =
+        await _firestoreRepository.updateGradeSheet(
+            currentUser: currentUser, newGradeSheet: newGradeSheet);
     response.fold((failure) {
       errorMessage = failure.errorMessage;
       state = AppState.error;

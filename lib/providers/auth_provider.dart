@@ -6,7 +6,6 @@ import 'package:gradish/repositories/auth_repository.dart';
 import '../core/enums.dart';
 import '../core/failure.dart';
 
-
 class AuthProvider extends ChangeNotifier {
   User? currentUser;
   final AuthRepository _authRepository;
@@ -31,6 +30,7 @@ class AuthProvider extends ChangeNotifier {
       errorMessage = null;
       state = AppState.success;
       currentUser = user;
+      notifyListeners();
     });
   }
 
@@ -101,11 +101,14 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     }, (userStream) {
       userStream.listen((user) {
+        print("subscribed to auth state changes stream");
         if (user == null) {
           authState = AuthState.unauthenticated;
           notifyListeners();
         } else {
+          currentUser = user;
           authState = AuthState.authenticated;
+
           notifyListeners();
         }
       });

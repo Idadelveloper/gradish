@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:googleapis/servicecontrol/v2.dart';
 import 'package:gradish/models/auth_models.dart';
 import 'package:gradish/providers/firestore_provider.dart';
 import 'package:provider/provider.dart';
@@ -88,17 +87,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             await authData
                                 .registerWithEmailAndPassword(credentials)
                                 .then((value) {
-                              if(authData.state == AppState.success){
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Successfully Registered")));
-                              }
-
-                              else if(authData.state == AppState.error){
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(firestoreData.errorMessage ?? "Failed to Register")));
+                              if (authData.state == AppState.success) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text("Successfully Registered")));
+                              } else if (authData.state == AppState.error) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            firestoreData.errorMessage ??
+                                                "Failed to Register")));
                               }
                               if (authData.currentUser != null) {
-                                firestoreData.addBasicUserInfo(
-                                    name: nameController.text.trim(),
-                                    currentUser: authData.currentUser!);
+                                firestoreData
+                                    .addBasicUserInfo(
+                                        name: nameController.text.trim(),
+                                        currentUser: authData.currentUser!)
+                                    .then((value) => Navigator.pop(context));
                               }
                             });
                           }
