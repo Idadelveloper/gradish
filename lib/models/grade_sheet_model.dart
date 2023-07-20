@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 class GradeSheet {
   final String courseName;
   final String courseCode;
@@ -55,6 +59,52 @@ class GradeSheet {
       year: year ?? this.year,
       semester: semester ?? this.semester,
       data: data ?? this.data,
+      docId: docId ?? this.docId,
     );
+
+
+
+  }
+
+  ///-------Save Gradsheet as CSV-----------////
+
+  Future<void> saveGradeSheetAsSCV()async {
+
+    List<String> marksAsStringList = ["Coded Number, Mark\n"];
+    for (Map<String, dynamic> grade in this.data!){
+
+      String dataAsString = "${grade["codedNumber"]} , ${grade["mark"]}\n";
+      marksAsStringList.add(dataAsString);
+    }
+    Directory outPutDir= Directory("/storage/emulated/0/Documents");
+    if(Platform.isAndroid){
+      outPutDir =  Directory("/storage/emulated/0/Documents");
+    } else if(Platform.isIOS){
+      outPutDir = await getApplicationDocumentsDirectory();
+    }
+
+    String filePath = "${outPutDir.path}/${this.courseName}_${this.year}_semester_${this.semester}.csv";
+
+    final File file = File(filePath);
+
+    ///Check permissions
+
+    Permission storagePermission = Permission.storage;
+
+    if(await storagePermission.isGranted){
+      print("permissions is granted");
+      await file.writeAsString(marksAsStringList.join());
+    } else {
+      await storagePermission.request().whenComplete(() async {
+        print("requesting permissions");
+      await file.writeAsString(marksAsStringList.join());
+
+      });
+    }
+
+
+
+
+
   }
 }

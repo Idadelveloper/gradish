@@ -39,19 +39,19 @@ class _HomeScreenState extends State<HomeScreen> {
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   width: double.infinity,
                   height: 32,
                 ),
                 Text(
                   "Hello ${authData.currentUser?.displayName ?? authData.currentUser?.email},",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 100,
                 ),
-                Text("No activity yet"),
-                SizedBox(height: 64),
+                const Text("No activity yet"),
+                const SizedBox(height: 64),
                 ElevatedButton(
                   onPressed: () {},
                   style: const ButtonStyle(
@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.w200,
                           color: Color(0xffffc604))),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.w200,
                           color: Color(0xffffc604))),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
                     // Navigator.push(
@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontWeight: FontWeight.w200,
                           color: Color(0xffffc604))),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () async {
                     authData.logOut;

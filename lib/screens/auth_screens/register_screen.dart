@@ -33,6 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Consumer2<AuthProvider, FirestoreProvider>(
       builder: (context, authData, firestoreData, child) {
         return Scaffold(
+          appBar: AppBar(),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),

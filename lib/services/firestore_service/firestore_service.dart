@@ -46,7 +46,10 @@ class FirestoreService {
       ///Gets the document id after uploading, and
       ///also immediately updates the document to include the docId
       docId = docRef.id;
-      await docRef.update(gradeSheet.copyWith(docId: docId).toMap());
+
+
+      await docRef.update(gradeSheet.copyWith(docId: docId).toMap()).then((value) {
+      });
     });
 
     return docId;

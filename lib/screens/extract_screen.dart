@@ -55,6 +55,7 @@ class _ExtractScreenState extends State<ExtractScreen> {
     return Consumer<ApiProvider>(
       builder: (context, apiData, child) {
         return Scaffold(
+          appBar: AppBar(),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -64,9 +65,7 @@ class _ExtractScreenState extends State<ExtractScreen> {
                   SizedBox(
                     height: 32,
                   ),
-                  _image == null
-                      ? Center(child: const Text("No image Selected"))
-                      : Column(
+                  if (_image == null) Center(child: const Text("Select an image")) else Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -102,7 +101,7 @@ class _ExtractScreenState extends State<ExtractScreen> {
                                       if (imageBytes != null) {
                                         await apiData
                                             .uploadImage(imageBytes)
-                                            .then((value) {
+                                            .then((value) async {
                                           if (apiData.state == AppState.error) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
@@ -116,7 +115,7 @@ class _ExtractScreenState extends State<ExtractScreen> {
                                                     content: Text("Success")));
 
                                             ///Shows the dialog
-                                            showDialog(
+                                         showDialog(
                                                 context: context,
                                                 builder: (context) {
                                                   return ExtractDialog(
@@ -125,7 +124,14 @@ class _ExtractScreenState extends State<ExtractScreen> {
                                                     result: apiData
                                                         .uploadedImageResult,
                                                   );
-                                                });
+                                                }).whenComplete(() {
+                                                  setState(() {
+                                                    _image = null;
+                                                  });
+                                         }
+                                         );
+
+
                                           }
                                         });
                                       } else {

@@ -30,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Consumer<AuthProvider>(
       builder: (context, authData, child) {
         return Scaffold(
+          appBar: AppBar(),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -37,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Text("Email"),
+                    const Text("Email"),
                     TextFormField(
                       controller: emailController,
                       validator: (value) {
@@ -48,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                     ),
-                    Text("Paaword"),
+                    const Text("Paaword"),
                     TextFormField(
                       controller: passwordController,
                       obscureText: true,
@@ -71,14 +72,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .signInWithEmailAndPassword(credentials);
                           }
                         },
-                        child: Text("Login")),
-                    Text("Don't yet have an account? "),
+                        child: const Text("Login")),
+                    const Text("Don't yet have an account? "),
                     InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => RegisterScreen()));
+                                  builder: (context) => const RegisterScreen()));
                         },
                         child: Text("Register",
                             style: TextStyle(

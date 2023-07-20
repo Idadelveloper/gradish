@@ -36,100 +36,111 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     return Consumer2<AuthProvider, FirestoreProvider>(
       builder: (context, authData, firestoreData, child) {
         return Scaffold(
+          appBar: AppBar(),
           body: SafeArea(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  const Text("Course Name"),
-                  TextFormField(
-                    controller: courseNameController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please input a valid course name";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  const Text("Course COde"),
-                  TextFormField(
-                    controller: courseCodeController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please input a valid course code";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  const Text("year"),
-                  TextFormField(
-                    controller: yearController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please input a valid course code";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  const Text("semester"),
-                  TextFormField(
-                    controller: semesterController,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please input a valid semester";
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                  ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          GradeSheet gradeSheetNoId = GradeSheet(
-                            courseName: courseNameController.text.trim(),
-                            courseCode: courseCodeController.text.trim(),
-                            year: yearController.text.trim(),
-                            semester: semesterController.text.trim(),
-                          );
+            child: SingleChildScrollView(
 
-                          if (authData.currentUser != null) {
-                            firestoreData
-                                .addGradeSheet(
-                                    currentUser: authData.currentUser!,
-                                    gradeSheet: gradeSheetNoId)
-                                .then((value) {
-                              if (firestoreData.state == AppState.success) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "Successfully Added GradeSheet")));
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ExtractScreen(
-                                              gradeSheet: firestoreData.gradeSheets.last,
-                                            )));
-                              } else if (firestoreData.state ==
-                                  AppState.error) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            firestoreData.errorMessage ??
-                                                "Failed to Add GradeSheet")));
 
+               child: Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text("Course Name"),
+                        TextFormField(
+                          controller: courseNameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please input a valid course name";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        const Text("Course COde"),
+                        TextFormField(
+                          controller: courseCodeController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please input a valid course code";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        const Text("year"),
+                        TextFormField(
+                          controller: yearController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please input a valid course code";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        const Text("semester"),
+                        TextFormField(
+                          controller: semesterController,
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please input a valid semester";
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        ElevatedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                GradeSheet gradeSheetNoId = GradeSheet(
+                                  courseName: courseNameController.text.trim(),
+                                  courseCode: courseCodeController.text.trim(),
+                                  year: yearController.text.trim(),
+                                  semester: semesterController.text.trim(),
+                                );
+
+                                if (authData.currentUser != null) {
+                                  firestoreData
+                                      .addGradeSheet(
+                                          currentUser: authData.currentUser!,
+                                          gradeSheet: gradeSheetNoId)
+                                      .then((value) {
+                                    if (firestoreData.state == AppState.success) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  "Successfully Added GradeSheet")));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => ExtractScreen(
+                                                    gradeSheet: firestoreData.gradeSheets.last,
+                                                  )));
+                                    } else if (firestoreData.state ==
+                                        AppState.error) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  firestoreData.errorMessage ??
+                                                      "Failed to Add GradeSheet")));
+
+                                    }
+
+                                  });
+                                }
                               }
+                            },
+                            child: const Text("Create Course")),
+                      ],
+                    ),
+                  ),
+                ),
 
-                            });
-                          }
-                        }
-                      },
-                      child: const Text("Create Course")),
-                ],
-              ),
             ),
           ),
         );
