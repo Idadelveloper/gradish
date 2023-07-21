@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () async {
                           authData.logOut;
                         },
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(Icons.logout),
                             Text("Logout")
@@ -72,21 +72,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget content(List fireStoreData, List courses, List courseCodes) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             // width: double.infinity,
             // height: 100,
             decoration: BoxDecoration(
               color: Colors.amber[200],
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Center(
+            child: const Center(
               child: Column(
                 children: [
                   Text(
@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 30),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: EdgeInsets.all(10),
                     child: Text(
                         "Select an action below to record your student marks or their ID info",
                       style: TextStyle(
@@ -107,10 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text(
+          const Text(
             "Choose an action",
             style: TextStyle(
               fontSize: 20
@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Padding(
-              padding: EdgeInsets.all(
+              padding: const EdgeInsets.all(
                 10
               ),
               child: Row(
@@ -132,8 +132,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (context) => const CreateCourseScreen()));
                     },
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10.0),
-                      padding: EdgeInsets.only(
+                      margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.only(
                         left: 20
                       ),
                       height: 100,
@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(Icons.description, size: 30,),
                           Text(
@@ -170,8 +170,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (context) => const CreateCourseScreen()));
                     },
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10.0),
-                      padding: EdgeInsets.only(
+                      margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: const EdgeInsets.only(
                           left: 20
                       ),
                       height: 100,
@@ -187,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      child: Row(
+                      child: const Row(
                         children: [
                           Icon(Icons.upload_file, size: 30,),
                           Text(
@@ -204,96 +204,92 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text(
+          const Text(
             "Record History",
             style: TextStyle(
               fontSize: 20
             ),
           ),
           Flexible(
-            child: fireStoreData.length != 0
-                ? Text("There is data")
+            child: fireStoreData.isNotEmpty
+                ? const Text("There is data")
                 : ListView.builder(
               itemCount: 9,
               shrinkWrap: true,
-              itemBuilder: (BuildContext context, int index) => Container(
-                // width: MediaQuery.of(context).size.width,
-                // padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                child: Card(
-                  elevation: 5.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: Container(
-                    // width: MediaQuery.of(context).size.width,
-                    // padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 200,
-                                    child: Text(
-                                      courses[index],
-                                      style: TextStyle(
-                                          fontSize: 18.0
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5,),
-                                  Text(
-                                    courseCodes[index],
-                                    style: TextStyle(
-                                        color: Colors.grey
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              itemBuilder: (BuildContext context, int index) => Card(
+                elevation: 5.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                child: Container(
+                  // width: MediaQuery.of(context).size.width,
+                  // padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
-                                IconButton(onPressed: (){}, icon: Icon(Icons.delete)),
+                                SizedBox(
+                                  width: 200,
+                                  child: Text(
+                                    courses[index],
+                                    style: const TextStyle(
+                                        fontSize: 18.0
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 5,),
+                                Text(
+                                  courseCodes[index],
+                                  style: TextStyle(
+                                      color: Colors.grey
+                                  ),
+                                ),
                               ],
-                            )
+                            ),
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.edit)),
+                              IconButton(onPressed: (){}, icon: const Icon(Icons.delete)),
+                            ],
+                          )
+                        ],
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: (){},
+                              style: const ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(Colors.yellow)
+                              ),
+                              child: const Text("Get Gradesheet", style: TextStyle(fontSize: 10),),
+                            ),
+                            ElevatedButton(
+                              onPressed: (){},
+                              style: const ButtonStyle(
+                                  backgroundColor: MaterialStatePropertyAll(Colors.yellow)
+                              ),
+                              child: const Text("Continue Scanning", style: TextStyle(fontSize: 10),),
+                            ),
                           ],
                         ),
-                        Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ElevatedButton(
-                                onPressed: (){},
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStatePropertyAll(Colors.yellow)
-                                ),
-                                child: Text("Get Gradesheet", style: TextStyle(fontSize: 10),),
-                              ),
-                              ElevatedButton(
-                                onPressed: (){},
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStatePropertyAll(Colors.yellow)
-                                ),
-                                child: Text("Continue Scanning", style: TextStyle(fontSize: 10),),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
