@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gradish/components/bottomNavBar.dart';
 import 'package:gradish/providers/auth_provider.dart';
 import 'package:gradish/providers/firestore_provider.dart';
 import 'package:gradish/screens/create_course_screen/create_course_screen.dart';
@@ -9,6 +11,14 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
+  // final User user;
+
+  // Future<User?> getFirestoreData(FirestoreProvider? firestoreData, AuthProvider? authData) async {
+  //   final User user = await firestoreData.gradeSheets;
+  //
+  //   return user;
+  // }
+
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -16,6 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Consumer2<AuthProvider, FirestoreProvider>(
       builder: (context, authData, firestoreData, child) {
+        // final User? user = authData.currentUser;
+        final List<String> courses = ["Computer Graphics", "Computer Forensics", "Visual Media Compression and Processing", "Computer Vision", "Parallel and Distributed Computing Systems", "In formation Retrieval", "Simulation and Modelling", "Entrepreneurship", "Research Methodology"];
+        final List<String> courseCodes = ["COME5101", "COME5102", "COME5103", "COME5104", "COME5105", "COME5106", "COME5107", "COME5108", "COME5109"];
+        print(firestoreData.gradeSheets);
         return Scaffold(
             appBar: AppBar(
               backgroundColor: const Color(0xffffc604),
@@ -30,90 +44,263 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {},
               ),
               actions: [
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  width: double.infinity,
-                  height: 32,
-                ),
-                Text(
-                  "Hello ${authData.currentUser?.displayName ?? authData.currentUser?.email},",
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 100,
-                ),
-                const Text("No activity yet"),
-                const SizedBox(height: 64),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll<Color>(Color(0xff3D3839)),
-                  ),
-                  child: const Text("Upload Class List",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w200,
-                          color: Color(0xffffc604))),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CreateCourseScreen()));
-                  },
-                  style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll<Color>(Color(0xff3D3839)),
-                  ),
-                  child: const Text("Record Marks",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w200,
-                          color: Color(0xffffc604))),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => const ExtractScreen()),
-                    // );
-                  },
-                  style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll<Color>(Color(0xff3D3839)),
-                  ),
-                  child: const Text("Record ID info",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w200,
-                          color: Color(0xffffc604))),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    authData.logOut;
-                  },
-                  style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll<Color>(Color(0xff3D3839)),
-                  ),
-                  child: const Text("logout",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w200,
-                          color: Color(0xffffc604))),
+                PopupMenuButton(
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: GestureDetector(
+                        onTap: () async {
+                          authData.logOut;
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.logout),
+                            Text("Logout")
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 )
               ],
-            ));
+            ),
+            body: content(firestoreData.gradeSheets, courses, courseCodes),
+          bottomNavigationBar: GradishBottomNavigationBar(),
+        );
       },
+    );
+  }
+
+  Widget content(List fireStoreData, List courses, List courseCodes) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            // width: double.infinity,
+            // height: 100,
+            decoration: BoxDecoration(
+              color: Colors.amber[200],
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                    "Hello Ida",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                        "Select an action below to record your student marks or their ID info",
+                      style: TextStyle(
+
+                      ),
+                    ),
+                  )
+                ],
+
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            "Choose an action",
+            style: TextStyle(
+              fontSize: 20
+            ),
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Padding(
+              padding: EdgeInsets.all(
+                10
+              ),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap:() {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CreateCourseScreen()));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: EdgeInsets.only(
+                        left: 20
+                      ),
+                      height: 100,
+                      width: 200,
+                      decoration: BoxDecoration(
+                        color: Colors.yellow[100],
+                        borderRadius: BorderRadius.circular(15.0),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 5,
+                            color: Colors.black.withOpacity(0.3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.description, size: 30,),
+                          Text(
+                            "Record Marks",
+                            style: TextStyle(
+                              fontSize: 18
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap:() {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const CreateCourseScreen()));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.0),
+                      padding: EdgeInsets.only(
+                          left: 20
+                      ),
+                      height: 100,
+                      width: 200,
+                      decoration: BoxDecoration(
+                        color: Colors.yellow[100],
+                        borderRadius: BorderRadius.circular(15.0),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 5,
+                            color: Colors.black.withOpacity(0.3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.upload_file, size: 30,),
+                          Text(
+                            "Upload Classlist",
+                            style: TextStyle(
+                                fontSize: 18
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            "Record History",
+            style: TextStyle(
+              fontSize: 20
+            ),
+          ),
+          Flexible(
+            child: fireStoreData.length != 0
+                ? Text("There is data")
+                : ListView.builder(
+              itemCount: 9,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) => Container(
+                // width: MediaQuery.of(context).size.width,
+                // padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                child: Card(
+                  elevation: 5.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Container(
+                    // width: MediaQuery.of(context).size.width,
+                    // padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 200,
+                                    child: Text(
+                                      courses[index],
+                                      style: TextStyle(
+                                          fontSize: 18.0
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5,),
+                                  Text(
+                                    courseCodes[index],
+                                    style: TextStyle(
+                                        color: Colors.grey
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                IconButton(onPressed: (){}, icon: Icon(Icons.edit)),
+                                IconButton(onPressed: (){}, icon: Icon(Icons.delete)),
+                              ],
+                            )
+                          ],
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                onPressed: (){},
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(Colors.yellow)
+                                ),
+                                child: Text("Get Gradesheet", style: TextStyle(fontSize: 10),),
+                              ),
+                              ElevatedButton(
+                                onPressed: (){},
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(Colors.yellow)
+                                ),
+                                child: Text("Continue Scanning", style: TextStyle(fontSize: 10),),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+          )
+        ],
+      ),
     );
   }
 }
