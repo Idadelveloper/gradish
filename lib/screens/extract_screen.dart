@@ -2,12 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gradish/components/appBar.dart';
+import 'package:gradish/components/bottomNavBar.dart';
 import 'package:gradish/models/grade_sheet_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../components/popup.dart';
 import '../core/enums.dart';
 import '../providers/api_provider.dart';
+import '../providers/auth_provider.dart';
 
 class ExtractScreen extends StatefulWidget {
   const ExtractScreen({Key? key, required this.gradeSheet}) : super(key: key);
@@ -52,102 +55,119 @@ class _ExtractScreenState extends State<ExtractScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ApiProvider>(
-      builder: (context, apiData, child) {
+    return Consumer2<ApiProvider, AuthProvider>(
+      builder: (context, apiData, authData, child) {
         return Scaffold(
-          appBar: AppBar(),
+          appBar: GradishAppBar(
+            title: "Take Photo",
+            authData: authData,
+          ),
+          bottomNavigationBar: GradishBottomNavigationBar(),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 32,
                   ),
-                  if (_image == null) Center(child: const Text("Select an image")) else Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
+                  if (_image == null)
+                    Center(
+                        child: Column(
+                      children: [
+                        Container(
+                          color: Colors.yellow[200],
+                          width: 200,
+                          height: 200,
+                          alignment: Alignment.center,
+                          child:
+                              Image.asset('images/illustrations/no_photo.jpg'),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Text("Select an image"),
+                      ],
+                    ))
+                  else
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(32),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(32),
+                              ),
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height * .6,
+                              child: Image.file(
+                                _image!,
+                                fit: BoxFit.cover,
+                              )),
+                        ),
+                        SizedBox(
+                          height: 32,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(32),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(32),
-                                  ),
-                                  width: double.infinity,
-                                  height:
-                                      MediaQuery.of(context).size.height * .6,
-                                  child: Image.file(
-                                    _image!,
-                                    fit: BoxFit.cover,
-                                  )),
-                            ),
-                            SizedBox(
-                              height: 32,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ElevatedButton(
-                                    onPressed: () {},
-                                    child: const Text("Cancel")),
-                                const SizedBox(width: 16),
-                                ElevatedButton(
-                                    onPressed: () async {
-                                      Uint8List? imageBytes =
-                                          await _image?.readAsBytes();
+                            ElevatedButton(
+                                onPressed: () {}, child: const Text("Cancel")),
+                            const SizedBox(width: 16),
+                            ElevatedButton(
+                                onPressed: () async {
+                                  Uint8List? imageBytes =
+                                      await _image?.readAsBytes();
 
-                                      if (imageBytes != null) {
-                                        await apiData
-                                            .uploadImage(imageBytes)
-                                            .then((value) async {
-                                          if (apiData.state == AppState.error) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(apiData
-                                                            .errorMessage ??
+                                  if (imageBytes != null) {
+                                    await apiData
+                                        .uploadImage(imageBytes)
+                                        .then((value) async {
+                                      if (apiData.state == AppState.error) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(
+                                                    apiData.errorMessage ??
                                                         "An error occurred")));
-                                          } else if (apiData.state ==
-                                              AppState.success) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                                    content: Text("Success")));
-
-                                            ///Shows the dialog
-                                         showDialog(
-                                                context: context,
-                                                builder: (context) {
-                                                  return ExtractDialog(
-                                                    gradeSheet:
-                                                        widget.gradeSheet,
-                                                    result: apiData
-                                                        .uploadedImageResult,
-                                                  );
-                                                }).whenComplete(() {
-                                                  setState(() {
-                                                    _image = null;
-                                                  });
-                                         }
-                                         );
-
-
-                                          }
-                                        });
-                                      } else {
+                                      } else if (apiData.state ==
+                                          AppState.success) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    "Please select an image")));
-                                      }
+                                                content: Text("Success")));
 
-                                      // print(result);
-                                    },
-                                    child: const Text("Continue"))
-                              ],
-                            ),
+                                        ///Shows the dialog
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return ExtractDialog(
+                                                gradeSheet: widget.gradeSheet,
+                                                result:
+                                                    apiData.uploadedImageResult,
+                                              );
+                                            }).whenComplete(() {
+                                          setState(() {
+                                            _image = null;
+                                          });
+                                        });
+                                      }
+                                    });
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Please select an image")));
+                                  }
+
+                                  // print(result);
+                                },
+                                child: const Text("Continue"))
                           ],
                         ),
+                      ],
+                    ),
                 ],
               ),
             ),
