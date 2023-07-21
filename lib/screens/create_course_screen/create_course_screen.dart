@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gradish/components/appBar.dart';
 import 'package:gradish/core/enums.dart';
 import 'package:gradish/models/grade_sheet_model.dart';
 import 'package:gradish/providers/firestore_provider.dart';
@@ -36,7 +37,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     return Consumer2<AuthProvider, FirestoreProvider>(
       builder: (context, authData, firestoreData, child) {
         return Scaffold(
-          appBar: AppBar(),
+          appBar: GradishAppBar(title: "Create Course", authData: authData),
           body: SafeArea(
             child: SingleChildScrollView(
 
